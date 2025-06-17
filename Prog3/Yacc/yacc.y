@@ -1,9 +1,9 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    int total_for_count = 0;      // Total count of for loops
-    int current_nesting = 0;      // Current level of nesting
-    int max_nesting = 0;          // Maximum level of nesting encountered
+    int total_for_count = 0;     
+    int current_nesting = 0;   
+    int max_nesting = 0;       
     int yylex();
     int yyerror(const char *s);
 %}
@@ -11,12 +11,11 @@
 %token FOR IDEN NUM OP
 
 %%
-
-STMTS: STMT
+STMTS: STMT                                                // S->P | SP
      | STMTS STMT
      ;
 
-STMT: FORSTMT                
+STMT: FORSTMT                                             // P-> F | I=E; | I; | {S} | ;
     | IDEN '=' EXPR ';'      
     | IDEN ';'               
     | '{' STMTS '}'          

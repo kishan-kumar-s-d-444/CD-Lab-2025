@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
-
 int var_count = 0;
-
 void yyerror(const char *s);
 %}
 
