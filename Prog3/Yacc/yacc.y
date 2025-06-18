@@ -1,73 +1,59 @@
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
-    int total_for_count = 0;     
-    int current_nesting = 0;   
-    int max_nesting = 0;       
-    int yylex();
-    int yyerror(const char *s);
+#include <stdio.h>
+#include <stdlib.h>
+int cnt = 0;
+int yylex();
+void yyerror(const char *s);
 %}
 
-%token FOR IDEN NUM OP
+%token FOR IDEN NUM
 
 %%
-STMTS: STMT                                                // S->P | SP
-     | STMTS STMT
-     ;
+S: S F {printf("Matched for loop\n");}
+ |
+ ; 
 
-STMT: FORSTMT                                             // P-> F | I=E; | I; | {S} | ;
-    | IDEN '=' EXPR ';'      
-    | IDEN ';'               
-    | '{' STMTS '}'          
-    | ';'                    
+F: FOR COND BODY {cnt++;}
+ ;
+
+COND: '(' E ';' E ';' E ')' 
     ;
 
+E: IDEN '=' E
+ | IDEN OP IDEN
+ | IDEN OP NUM
+ | IDEN FIX
+ | IDEN
+ | '(' E ')'
+ ;
 
-FORSTMT: FOR '(' ASSGN ';' COND ';' ASSGN ')' 
-            {
-                total_for_count++;             
-                current_nesting++;              
-                if (current_nesting > max_nesting) {
-                    max_nesting = current_nesting;  
-                }
-            }
-            STMT
-            {
-                current_nesting--;            
-            }
-            ;
+OP: '=' '=' | '>' | '<' | '<' '=' | '>' '=' | '+' '=' | '-' '+' | '=' | '+' | '-' | '*'  
 
-ASSGN: IDEN '=' EXPR
-    | IDEN 
+  ;
+
+
+
+FIX: '+''+' | '-''-'
+   ;
+
+
+BODY: '{' BODY '}' 
+    | F 
+    | E ';' 
     |
-      ;
-
-COND: IDEN OP IDEN
-     | IDEN OP NUM
-     | IDEN
-     | NUM
-     ;
-
-
-EXPR: IDEN
-     | NUM
-     | IDEN '+' IDEN
-     | IDEN '-' IDEN
-     | IDEN '*' IDEN
-     | IDEN '/' IDEN
-     ;
-
+    ;
 %%
 
+
+
 int main() {
-    printf("Enter the code snippet (Ctrl+D to end input on Unix, Ctrl+Z on Windows):\n");
+    printf("Enter the snippet:\n");
     yyparse();
-    printf("\nTotal FOR loops: %d\n", total_for_count);
-    printf("Maximum nesting level: %d\n", max_nesting);
+    printf("Count of for : %d\n", cnt);
     return 0;
 }
 
-int yyerror(const char *s) {
-    fprintf(stderr, "Parse error: %s\n", s);
+void yyerror(const char *s) {
+    fprintf(stderr, "Invalid: %s\n", s);
     exit(1);
 }

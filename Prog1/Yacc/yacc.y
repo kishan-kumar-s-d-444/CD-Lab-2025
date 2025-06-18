@@ -9,7 +9,7 @@ int yylex();
 S:A B
 ;
 A:'a'A'b'
-|
+| 
 ;
 B:'b'B'c'
 |

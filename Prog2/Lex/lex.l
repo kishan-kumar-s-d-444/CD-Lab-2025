@@ -1,30 +1,62 @@
 %{
-#include <stdio.h>
-int posint = 0, negint = 0, posfrac = 0, negfrac = 0;
+#include<stdio.h>
+#include<stdlib.h>
+int a=0,b=0,c=0,d=0;
+
 %}
 
-num [0-9]+
-posint \+?{num}
-negint -{num}
-posnum \+?{num} \/ \+?{num} | -{num} \/ -{num}
-negnum -{num} \/ \+?{num} | \+?{num} \/ -{num}
+
 
 %%
-{posint} posint++;
-{negint} negint++;
-{posnum} posfrac++;
-{negnum} negfrac++;
-[ \t] ;
-[\n] return 0;
-. ECHO;
-%%
 
-int yywrap(){}
+\+?[0-9]+ {a++;}
 
-int main() {
-	yylex();
-	printf("Positive integers: %d\n", posint);
-	printf("Negative integers: %d\n", negint);
-	printf("Positive fractions: %d\n", posfrac);
-	printf("Negative fractions: %d\n", negfrac);
+\-[0-9]+ {b++;}
+
+\+?[0-9]+\/\+?[0-9]+ {c++;} 
+
+\-[0-9]+\/\-[0-9]+ {c++;} 
+
+\+?[0-9]+\/\-[0-9]+ {d++;}
+
+\-[0-9]+\/\+?[0-9]+ {d++;}
+
+[ \t]+ ;
+
+[\n] {return 0;}
+
+. {printf("Invalid\n");return yytext[0];}
+
+%% 
+
+
+
+int yywrap()
+
+{printf("INVALID\n"); 
+
+ return 1;
+
 }
+
+
+
+int main()
+
+{ printf("Enter the number\n");
+
+  yylex();
+
+  printf("%d\n",a);
+
+  printf("%d\n",b);
+
+  printf("%d\n",c);
+
+  printf("%d\n",d);
+
+  printf("DOne\n");
+
+  return 0;
+
+  }
