@@ -1,14 +1,13 @@
+// YACC program that reads the C statements for an input file and 
+// converts them in quadruple three address intermediate code
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
 int yyerror();
 
-extern FILE *yyin; // optional
-
-
 typedef char *string;
-
 struct {
 	string res, op1, op2;
 	char op;
@@ -26,13 +25,11 @@ void quadruples();
 
 %token <exp> IDEN NUM
 %type <exp> EXP
-
 %right '='
 %left '+' '-'
 %left '*' '/'
 
 %%
-
 STMTS	: STMTS STMT
 	|
 	;
@@ -49,7 +46,6 @@ EXP : IDEN '=' EXP { $$ = addToTable($1, $3, '='); }
     | IDEN { $$ = $1; }
     | NUM { $$ = $1; }
     ;
-
 %%
 
 int yyerror() {
@@ -58,13 +54,9 @@ int yyerror() {
 }
 
 int main() {
-	// yyin = fopen("6.txt", "r"); 
-	// Only if input is given from text file
 	yyparse();
-
 	printf("\nThree address code:\n");
 	threeAddressCode();
-
 	printf("\nQuadruples:\n");
 	quadruples();
 }
@@ -75,7 +67,6 @@ string addToTable(string op1, string op2, char op) {
 		code[idx].res = op1;
 		return op1;
 	}
-
 	idx++;
 	string res = malloc(3);
 	sprintf(res, "@%c", idx + 'A');

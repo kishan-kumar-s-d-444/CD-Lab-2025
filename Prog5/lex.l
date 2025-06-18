@@ -13,7 +13,7 @@
 "]"        { return RBRACKET; }
 [0-9]+     { yylval = atoi(yytext); return INT; }
 [a-zA-Z_][a-zA-Z0-9_]* { return ID; }
-[ \t\n]    { /* ignore whitespace */ }
+[ \t\n]    ;
 .          { return yytext[0]; }
 %%
 

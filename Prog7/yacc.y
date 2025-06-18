@@ -1,3 +1,5 @@
+// YACC program that identifies the Function Definition of C language
+
 %{
     #include<stdio.h>
     #include<stdlib.h>
