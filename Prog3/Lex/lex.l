@@ -5,8 +5,8 @@
 %}
 
 %%
-"//"[^\n]*	{single++;fprintf(fp,"%s\n",yytext);}    //Matches the starting // and any character except newline (\n), zero or more times
-"/*" ( [^*] | [*]+[^*/] | [*]*)* "*/"	{
+"//"[^\n]*	{single++;fprintf(fp,"%s\n",yytext);}   //e
+"/*" ( [^*] | [*]+[^*/] | [*]*)* "*/"	{           //e
 	multi++;
 	for(int i=0;i<yyleng;i++)
 	{
@@ -27,7 +27,7 @@ int main()
 	yyin=fopen("input.txt","r");
 	yyout=fopen("output.txt","w");
     fp=fopen("comments.txt","w");
-	yylex();
+	yylex();                                                               //e
 	printf("Single: %d\n Multi: %d\nMlines: %d\n",single,multi,mlines);
 	return 0;
 }

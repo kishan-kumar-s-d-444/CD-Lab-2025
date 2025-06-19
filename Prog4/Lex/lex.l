@@ -4,8 +4,8 @@
 %}
 
 %%
-"int"|"char"|"float"|"double"|"if"|"else"|"for"|"while"|"exit"|"return" {printf("Keyword\n");key++;}
-[a-zA-Z_][a-zA-Z0-9_]*  {printf("Identifier\n");id++;}
+"int"|"char"|"float"|"double"|"if"|"else"|"for"|"while"|"exit"|"return" {printf("Keyword\n");key++;}        //eS
+[a-zA-Z_][a-zA-Z0-9_]*  {printf("Identifier\n");id++;}  
 [\+\-\*\/\%\^\&\|\!\=]  {printf("Operator\n");op++;}
 [^\n]*  {printf("Invalid\n");}
 %%
