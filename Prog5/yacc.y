@@ -1,44 +1,35 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+int cnt=0;
 int yylex();
-int var_count = 0;
-void yyerror(const char *s);
+int yyerror(const char *s);
 %}
 
-%token INT FLOAT CHAR DOUBLE
-%token ID
-%token SEMICOLON COMMA LBRACKET RBRACKET
+%token TYPE IDEN NUM LB RB SEMI COM EQ
 
 %%
-declaration: TYPE VARS SEMICOLON { 
-            printf("Number of variables declared: %d\n", var_count); 
-            var_count = 0; 
-            }
-           ;
+S : TYPE VAR SEMI {printf("DECLARED\n");}
+  ;
 
-TYPE: INT { printf("Type: int\n"); }
-    | FLOAT { printf("Type: float\n"); }
-    | CHAR { printf("Type: char\n"); }
-    | DOUBLE { printf("Type: double\n"); }
+VAR : v {cnt++;}
+    | VAR COM v {cnt++;}
     ;
 
-VARS: var             { var_count++; }
-    | VARS COMMA var { var_count++; }
-    ;
-
-var: ID
-   | ID LBRACKET INT RBRACKET
-   ;
-
+v : IDEN
+| IDEN EQ NUM
+| IDEN LB NUM RB
+;
 %%
 
-void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+int yyerror(const char *s){
+ fprintf(stderr,"Error %s\n",s);
+ exit(0);
 }
 
-int main() {
-    printf("Enter a declaration statement:\n");
-    yyparse();
-    return 0;
+int main(){ 
+  printf("Enter the statement\n");
+  yyparse();
+  printf("Varidables=%d\n",cnt);
+  return 0;
 }
