@@ -8,7 +8,7 @@ int yylex();
 
 int yyerror();
 
-extern FILE *yyin;
+extern FILE *yyin;    //e
 
 typedef char *string;
 
@@ -40,7 +40,7 @@ void quad();
 
 %token <exp> IDEN NUM 
 
-%type <exp> EXPR
+%type <exp> EXPR       //e
 
 %right '='
 
@@ -104,7 +104,7 @@ string addto(string op1,string op2,char op){
 
  string res=malloc(3);
 
- sprintf(res,"@%c\n",idx+'A');
+ sprintf(res,"@%c\n",idx+'A');    //e
 
  code[idx].op1=op1;
 
