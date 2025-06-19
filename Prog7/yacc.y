@@ -1,63 +1,64 @@
 // YACC program that identifies the Function Definition of C language
 
 %{
-    #include<stdio.h>
-    #include<stdlib.h>
-    int yyerror();
-    int yylex();
+#include<stdio.h>
+#include<stdlib.h>
+int cnt=0;
+int stmt=0;
+int param=0;
+int yylex();
+int yyerror(const char *s);
 %}
 
-%token TYPE IDEN NUM
-%left '+' '-'
-%left '*' '/'
+%token TYPE IDEN NUM OP
 
 %%
-S: FUN  { printf("Accepted\n"); exit(0); } ;
-FUN: TYPE IDEN '(' PARAMS ')' BODY ;
-BODY: S1';' | '{'SS'}';
-PARAMS: PARAM','PARAMS | PARAM | ;
-PARAM:  TYPE IDEN;
-SS: S1';'SS | ;
-S1: ASSGN | E | DECL ;
-DECL: TYPE IDEN | TYPE ASSGN ;
-ASSGN: IDEN '=' E ;
-E : E '+' E | E '-' E | E '*' E | E '/' E | '-''-'E | '+''+'E | E'+''+' | E'-''-' | T ;
-T : NUM | IDEN ;
+S : TYPE IDEN '(' PARAM ')' BODY{cnt++;printf("Function Declared\n");}
+  ;
+
+PARAM : p   {param++;}
+      | p ',' PARAM {param++;}
+      ; 
+
+p : TYPE IDEN
+  | NUM
+  | IDEN
+  ;
+
+BODY : stmt ';'      {stmt++;}
+     | '{'stmt ';' BODY'}' {stmt++;}
+     |
+     ;
+
+stmt : TYPE IDEN
+     | EXPR
+     ;
+
+EXPR : IDEN OP IDEN
+     | NUM OP NUM
+     | IDEN OP EXPR
+     | IDEN OP NUM
+     | NUM OP IDEN
+     | IDEN
+     ;
 %%
 
 
-int main()
-{
-    printf("enter input: ");
-    yyparse();
-    printf("successfull\n");
-    return 0;
-}
-int yyerror()
-{
-    printf("ERROR\n");
-    exit(0);
+
+int yyerror(const char *s){
+ fprintf(stderr,"Error %s\n",s);
+ exit(0);
 }
 
 
 
+int main(){ 
+  printf("Enter the statement\n");
+  yyparse();
+  printf("Functions=%d\n",cnt);
+  printf("Parameters=%d\n",param);
+  printf("Statements=%d\n",stmt);
+  return 0;-
+}
 
-// Tokens
 
-// IDEN -> identifier
-// NUM -> number
-// TYPE -> datatype
-
-// Non-terminals
-
-// S -> Start symbol
-// FUN -> function block
-// PARAMS -> parameters
-// PARAM -> parameter
-// BODY -> Function body
-// S1 -> Single Statement
-// SS -> Set of statements
-// T -> Term
-// E -> Expression
-// DECL -> Declaration
-// ASSGN -> Assignment
