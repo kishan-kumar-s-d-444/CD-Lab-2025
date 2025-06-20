@@ -26,7 +26,7 @@ p : TYPE IDEN
   ;
 
 BODY : stmt ';'      {stmt++;}
-     | '{'stmt ';' BODY'}' {stmt++;}
+     | '{'stmt ';' BODY'}' {stmt++;}                                         //e
      |
      ;
 
@@ -41,7 +41,7 @@ EXPR : IDEN OP IDEN
      | NUM OP IDEN
      | IDEN
      ;
-%%
+%% 
 
 
 
